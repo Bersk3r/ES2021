@@ -18,39 +18,42 @@
 <script>
     <!--  자바스크립트 영역    -->
     const number = Number(prompt('몇 명이 참가하나요?'));
-    const $button = document.querySelector('button');
-    const $input = document.querySelector('input');
-    const $word = document.querySelector('#word');
-    const $order = document.querySelector('#order');
-    let word; // 제시어
-    let newWord; // 새로 입력한 단어
 
-    const onClickButton = () => {
-        if(word.length === 3 && (!word || word[word.length - 1] === newWord[0])) {
-            // 제시어가 비어 있는지 혹은 단어가 올바른지 여부
-            // 비어 있다.
-            word = newWord; // 입력한 단어가 제시어가 된다.
-            $word.textContent = word;
-            const order = Number($order.textContent);
+    if (number > 0) {
+        const $button = document.querySelector('button');
+        const $input = document.querySelector('input');
+        const $word = document.querySelector('#word');
+        const $order = document.querySelector('#order');
+        let word; // 제시어
+        let newWord; // 새로 입력한 단어
 
-            if (order + 1 > number) {
-                $order.textContent = 1;
-            } else {
-                $order.textContent = order + 1;
+        const onClickButton = () => {
+            if(word.length === 3 && (!word || word[word.length - 1] === newWord[0])) {
+                // 제시어가 비어 있는지 혹은 단어가 올바른지 여부
+                // 비어 있다.
+                word = newWord; // 입력한 단어가 제시어가 된다.
+                $word.textContent = word;
+                const order = Number($order.textContent);
+
+                if (order + 1 > number) {
+                    $order.textContent = 1;
+                } else {
+                    $order.textContent = order + 1;
+                }
+
+            } else { // 올바르지 않은가
+                alert('올바르지 않는 단어입니다!');
             }
+            $input.value = '';
+            $input.focus(); // 입력 창에 커서를 둔다.
+        };
+        const onInput = (event) => {
+            newWord = event.target.value;
+        };
 
-        } else { // 올바르지 않은가
-            alert('올바르지 않는 단어입니다!');
-        }
-        $input.value = '';
-        $input.focus(); // 입력 창에 커서를 둔다.
-    };
-    const onInput = (event) => {
-        newWord = event.target.value;
-    };
-
-    $button.addEventListener('click', onClickButton);
-    $input.addEventListener('input', onInput);
+        $button.addEventListener('click', onClickButton);
+        $input.addEventListener('input', onInput);
+    }
 </script>
 </body>
 </html>
