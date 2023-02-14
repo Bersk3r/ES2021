@@ -5,7 +5,11 @@
 </head>
 <body>
 <form id="form">
-  <input type="text" id="input">
+  <input
+          required
+          type="text"
+          id="input"
+          minlength="4" maxlength="4" pattern="^(?!.*(.).*\1)\d{4}$">
   <button>확인</button>
 </form>
 <div id="logs"></div>
@@ -13,6 +17,88 @@
     const $input = document.querySelector('#input');
     const $form = document.querySelector('#form');
     const $logs = document.querySelector('#logs');
+    // 각 태그에서 값을 가져올 선택자 변수를 선언 및 초기화
+
+    const numbers = [];
+    // 1~9까지 저장할 숫자 배열을 선언
+    for(let n = 0; n < 9; n += 1) {
+        numbers.push(n + 1);
+    }
+    // 9개의 숫자를 값을 순차적으로 생성
+
+    const answer = [];
+    for (let n = 0; n < 4; n += 1) { // 네 번 반복
+        const index = Math.floor(Math.random() * numbers.length); // 0~8 정수 (배열 인덱스용)
+        // const index = Math.floor(Math.random() * (9-n)); // 0~8 정수 (배열 인덱스용)
+        answer.push(numbers[index]);
+        // numbers 배열로부터 하나의 값을 꺼내서 answer에 저장
+        numbers.splice(index, 1);
+        // numbers 배열로부터 꺼낸 값을 한 개를 제거
+    }
+    console.log(answer);
+
+    const tries = [];
+    function checkInput(input) {
+        if (input.length !== 4) { // 길이는 4가 아닌가
+            return alert('4자리 숫자를 입력해 주세요.');
+        }
+        if (new Set(input).size !== 4) { // 중복된 숫자가 있는가
+            return alert('중복되지 않게 입력해 주세요.');
+        }
+        if (tries.includes(input)) { // 이미 시도한 값은 아닌가
+            return alert('이미 시도한 값입니다.');
+        }
+        return true;
+    }
+
+    function defeated() {
+        const message = document.createTextNode(`패배! 정답은 ${answer.join('')}`);
+        $logs.appendChild(message);
+        // const listenerList = window.getEventListeners($form);
+        // $form.removeEventListener('submit', listenerList.submit[0].listener);
+    }
+
+    let out = 0;
+    $form.addEventListener('submit', (event) => {
+        event.preventDefault(); // 기본 이벤트 동작 취소
+        const value = $input.value;
+        $input.value = '';
+        const valid = checkInput(value);
+
+        if (!valid) return;
+        if (answer.join('') === value) {
+            $logs.textContent = '홈런!';
+            return;
+        }
+        if (tries.length >= 9) {
+            defeated();
+            return;
+        }
+        // answer: 3146, value: 1234
+        let strike = 0;
+        let ball = 0;
+
+        for (let i = 0; i < answer.length; i++) {
+            const index = value.indexOf(answer[i]);
+            if (index > -1) { // 일치하는 숫자 발견
+                if (index === i) { // 자릿수도 같음
+                    strike += 1;
+                } else { // 숫자만 같음
+                    ball += 1;
+                }
+            }
+        }
+        
+        if(!strike && !ball) {
+            out+=1;
+            $logs.append(`${value}: ${out} 아웃`, document.createElement('br'));
+        } else { $logs.append(`${value}: ${strike} 스트라이크 ${ball} 볼`, document.createElement('br')); }
+        if (out === 3) {
+            defeated();
+            return;
+        }
+        tries.push(value);
+    });
 </script>
 </body>
 </html>
