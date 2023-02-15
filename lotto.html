@@ -38,21 +38,25 @@
     const $result = document.querySelector('#result');
     const $bonus = document.querySelector('#bonus');
 
-    const showBall = (number, $target) => {
+    //const showBall = (number, $target) => {
+    const drawBall = (number, $parent) => {
         const $ball = document.createElement('div');
         $ball.className = 'ball';
         $ball.textContent = number;
-        $target.appendChild($ball);
+        //$target.appendChild($ball);
+        $parent.appendChild($ball);
     };
 
     winBalls.map((v, i) => {
         setTimeout(() => {
-            showBall(v, $result);
+            //showBall(v, $result);
+            drawBall(v, $result);
         }, (i+1)*1000);
     });
 
     setTimeout(() => {
-        showBall(bonus, $bonus);
+        //showBall(bonus, $bonus);
+        drawBall(bonus, $result);
     }, 7000);
 
 </script>
