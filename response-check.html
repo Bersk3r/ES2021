@@ -32,7 +32,9 @@
 
     let startTime;
     let endTime;
-    const records = [ ];
+    const records = [];
+    let timeoutId;
+
     // let 선언 이후로 전역 스코프로 사용된다.
     // var는 선언 이전에 사용해도 에러가 발생되지 않는다.
     $screen.addEventListener('click', (event) => {
@@ -42,15 +44,20 @@
           $screen.classList.remove('waiting');
           $screen.classList.add('ready');
           $screen.textContent = '초록색이 되면 클릭하세요';
-          setTimeout(function () {
-              startTime = new Date();
-              // let을 여기에 선언하지 않는 이유는 let이 블록 스코프이므로
-              $screen.classList.remove('ready');
-              $screen.classList.add('now');
-              $screen.textContent = '클릭하세요!';
-          }, Math.floor(Math.random() * 1000) + 2000); // 2000~3000 사이 수
+          timeoutId = setTimeout(function () {
+                startTime = new Date();
+                // let을 여기에 선언하지 않는 이유는 let이 블록 스코프이므로
+                $screen.classList.remove('ready');
+                $screen.classList.add('now');
+                $screen.textContent = '클릭하세요!';
+            }, Math.floor(Math.random() * 1000) + 2000); // 2000~3000 사이 수
       } else if(event.target.classList.contains('ready')) {
+          clearTimeout(timeoutId);
+          $screen.classList.remove('ready');
+          $screen.classList.add('waiting');
+          $screen.textContent = '너무 성급하시군요!';
       } else if(event.target.classList.contains('now')) {
+          endTime = new Date();
           const current = endTime - startTime;
           records.push(current);
           const average = records.reduce((a, c) => a + c) / records.length;
