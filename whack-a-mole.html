@@ -146,6 +146,8 @@
   function tick() {
     holes.forEach((hole, index) => {
       if (hole) return; // 무언가 일어나고 있으면 return
+      // holes[index]와 원시적으로 값은 동일하다.
+      // 값을 바꾸고자 하는 경우, 참조 관계인 상태에서만 가능하다.
       const randomValue = Math.random();
       if (Math.random() < gopherPercent) {
         const $gopher = $$cells[index].querySelector('.gopher');
